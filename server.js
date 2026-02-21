@@ -8,6 +8,7 @@
 
 const express = require('express');
 const mongoose = require('mongoose');
+const Content = require('./models/Content');
 const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
 require('dotenv').config();
@@ -22,10 +23,14 @@ app.use(cors({
 // ----------------------
 // DATABASE CONNECTION
 // ----------------------
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://TheGrooveVig_db_user:2026TGVIGPTYLTD@loyaltycluster.pe06khq.mongodb.net/tgvig?retryWrites=true&w=majority";
-mongoose.connect(MONGODB_URI)
-    .then(() => console.log('MongoDB Connected to TGVIG_DB!'))
-    .catch(err => console.error('MongoDB Connection Error:', err));
+mongoose.connect(process.env.MONGO_URI)
+  .then(async () => {
+    console.log("Connected to MongoDB");
+    const allContent = await Content.find().lean();
+    console.log(allContent);  // <- check if your blog/menu/club content exists
+    process.exit(0);
+  })
+  .catch(err => console.error(err));
 
 // ----------------------
 // SCHEMA DEFINITIONS

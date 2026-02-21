@@ -319,16 +319,9 @@ app.post('/api/admin/content/update', async (req, res) => {
 
 app.get('/api/content/:type', async (req, res) => {
     const { type } = req.params;
-
     try {
         const content = await Content.findOne({ type }).lean();
-
-        if (!content) {
-            return res.json({ success: true, data: [] });
-        }
-
-        res.json({ success: true, data: content.data });
-
+        res.json({ success: true, data: content?.data || [] });
     } catch (err) {
         res.status(500).json({ success: false, error: "Failed to fetch content" });
     }

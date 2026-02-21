@@ -17,5 +17,8 @@
     "pg": "^8.18.0",
     "uuid": "^13.0.0"
   },
-  "type": "commonjs"
+  "type": "commonjs",
+  "engines": {
+  "node": ">=18"
+}
 }

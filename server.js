@@ -18,7 +18,7 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   origin: '*'
   }));
-  
+
 // ----------------------
 // DATABASE CONNECTION
 // ----------------------
@@ -33,10 +33,10 @@ mongoose.connect(MONGODB_URI)
 
 // Content Schema (blogs, menus, clubs)
 const contentSchema = new mongoose.Schema({
-    type: String,
-    data: Object
+    type: { type: String, required: true },
+    data: { type: Array, default: [] }
 });
-const Content = mongoose.model('Content', contentSchema);
+module.exports = mongoose.model('Content', contentSchema);
 
 // Member Schema
 const memberSchema = new mongoose.Schema({
@@ -302,6 +302,23 @@ app.post('/api/admin/content/update', async (req, res) => {
         res.json({ success: true, message: `Content ${type} updated` });
     } catch (err) {
         res.status(500).json({ success: false, error: "Update failed" });
+    }
+});
+
+app.get('/api/content/:type', async (req, res) => {
+    const { type } = req.params;
+
+    try {
+        const content = await Content.findOne({ type }).lean();
+
+        if (!content) {
+            return res.json({ success: true, data: [] });
+        }
+
+        res.json({ success: true, data: content.data });
+
+    } catch (err) {
+        res.status(500).json({ success: false, error: "Failed to fetch content" });
     }
 });
 

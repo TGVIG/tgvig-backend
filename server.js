@@ -36,7 +36,8 @@ const contentSchema = new mongoose.Schema({
     type: { type: String, required: true },
     data: { type: Array, default: [] }
 });
-module.exports = mongoose.model('Content', contentSchema);
+const Content = mongoose.model('Content', contentSchema);
+module.exports = Content;
 
 // Member Schema
 const memberSchema = new mongoose.Schema({
@@ -298,10 +299,16 @@ app.get('/members', async (req, res) => {
 app.post('/api/admin/content/update', async (req, res) => {
     const { type, content } = req.body;
     try {
-        await Content.updateOne({ type }, { $push: { data: content } }, { upsert: true });
+        const result = await Content.updateOne(
+            { type }, 
+            { $push: { data: content } }, 
+            { upsert: true }
+        );
+        console.log("Update result:", result);  // <-- log to see what happened
         res.json({ success: true, message: `Content ${type} updated` });
     } catch (err) {
-        res.status(500).json({ success: false, error: "Update failed" });
+        console.error("Update error:", err);  // <-- full error here
+        res.status(500).json({ success: false, error: err.message });
     }
 });
 

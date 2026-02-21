@@ -14,11 +14,11 @@ require('dotenv').config();
 
 const app = express();
 app.use(express.json());
-app.use(cors());
-  origin: ['thegroovevig.netlify.app'],
-  methods: ['GET','POST','PUT','DELETE'],
-  credentials: true
-
+app.use(cors({
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  origin: '*'
+  }));
+  
 // ----------------------
 // DATABASE CONNECTION
 // ----------------------

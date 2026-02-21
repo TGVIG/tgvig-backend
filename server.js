@@ -8,7 +8,6 @@
 
 const express = require('express');
 const mongoose = require('mongoose');
-const Content = require('./models/Content');
 const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
 require('dotenv').config();
